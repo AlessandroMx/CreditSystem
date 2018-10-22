@@ -1,0 +1,16 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://itq.edu/soa/credit">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cred:creditRequest>
+         <cred:nombres>Luis Gerardo</cred:nombres>
+         <cred:apellidoPaterno>Gomez</cred:apellidoPaterno>
+         <cred:apellidoMaterno>Chavez</cred:apellidoMaterno>
+         <cred:curp>VEGA780615HDFLML08</cred:curp>
+         <cred:domicilio>vista bonita #109 col. villa del sol</cred:domicilio>
+         <cred:salario>15000</cred:salario>
+         <cred:monto>300000</cred:monto>
+         <cred:tasaInteres>7</cred:tasaInteres>
+         <cred:plazo>48</cred:plazo>
+      </cred:creditRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

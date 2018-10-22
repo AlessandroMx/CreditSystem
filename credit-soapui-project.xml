@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="55a98e4b-5232-4c8e-9501-91417d070a2f" activeEnvironment="Default" name="credit" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="40e415ad-4b16-429e-aee6-58654b41c8e5" wsaVersion="NONE" name="CreditBinding" type="wsdl" bindingName="{http://itq.edu/soa/credit}CreditBinding" soapVersion="1_1" anonymous="optional" definition="file:/D:/Documents/Escuela/9no.%20Semestre/Arquitectura%20Orientada%20a%20Objetos/creditSchemas/credit.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\D:\Documents\Escuela\9no.%20Semestre\Arquitectura%20Orientada%20a%20Objetos\creditSchemas\credit.wsdl"><con:part><con:url>file:\D:\Documents\Escuela\9no.%20Semestre\Arquitectura%20Orientada%20a%20Objetos\creditSchemas\credit.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://itq.edu/soa/credit" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://itq.edu/soa/credit">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://itq.edu/soa/credit" elementFormDefault="qualified">
+      <xs:include schemaLocation="credit.xsd"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="CreditRequest">
+    <wsdl:part name="parameter" element="tns:creditRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CreditResponse">
+    <wsdl:part name="parameter" element="tns:creditResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CreditPortType">
+    <wsdl:operation name="CreditOperation">
+      <wsdl:input message="tns:CreditRequest"/>
+      <wsdl:output message="tns:CreditResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CreditBinding" type="tns:CreditPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CreditOperation">
+      <soap:operation soapAction="http://itq.edu/factura/generarCredito"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CreditService">
+    <wsdl:port name="CreditPort" binding="tns:CreditBinding">
+      <soap:address location="http://localhost:8088/generarCredito"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\D:\Documents\Escuela\9no.%20Semestre\Arquitectura%20Orientada%20a%20Objetos\creditSchemas\credit.xsd</con:url><con:content><![CDATA[<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" targetNamespace="http://itq.edu/soa/credit" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="creditRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nombres">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="([A-Za-z]+[\s]*)+"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="apellidoPaterno">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[A-Za-z]+"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="apellidoMaterno">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[A-Za-z]+"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="curp">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="domicilio" type="xs:string"/>
+        <xs:element name="salario" type="xs:double"/>
+        <xs:element name="monto" type="xs:double"/>
+        <xs:element name="tasaInteres" type="xs:double"/>
+        <xs:element name="plazo" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creditResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="autorizado" type="xs:boolean"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://LAPTOP-C1BDO99S:8088/mockCreditBinding</con:endpoint><con:endpoint>http://localhost:8088/generarCredito</con:endpoint></con:endpoints><con:operation id="6f7f3861-be0a-46f6-aac0-6d3eb6fbaf15" isOneWay="false" action="http://itq.edu/factura/generarCredito" name="CreditOperation" bindingOperationName="CreditOperation" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c1c80401-fdb7-4e65-ab60-9ccfa055bca5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://LAPTOP-C1BDO99S:8088/mockCreditBinding</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://itq.edu/soa/credit">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <cred:creditRequest>\r
+         <cred:nombres>Luis Gerardo</cred:nombres>\r
+         <cred:apellidoPaterno>Gomez</cred:apellidoPaterno>\r
+         <cred:apellidoMaterno>Chavez</cred:apellidoMaterno>\r
+         <cred:curp>VEGA780615HDFLML08</cred:curp>\r
+         <cred:domicilio>vista bonita #109 col. villa del sol</cred:domicilio>\r
+         <cred:salario>15000</cred:salario>\r
+         <cred:monto>300000</cred:monto>\r
+         <cred:tasaInteres>7</cred:tasaInteres>\r
+         <cred:plazo>48</cred:plazo>\r
+      </cred:creditRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://itq.edu/factura/generarCredito"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="73939473-e94f-4bd1-8892-da74c101a492" port="8088" path="/mockCreditBinding" host="LAPTOP-C1BDO99S" name="CreditBinding MockService"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="CreditOperation" id="e51a8dd9-8cd9-4d32-8725-ea5d8a2bd349" interface="CreditBinding" operation="CreditOperation"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="5b6f4de3-d84e-4d9c-bced-48e0fd0c38db" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://itq.edu/soa/credit">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cred:creditResponse>
+         <cred:autorizado>true</cred:autorizado>
+      </cred:creditResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://itq.edu/factura/generarCredito"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
