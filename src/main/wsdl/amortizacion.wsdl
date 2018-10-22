@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://soa.com/amortizacion" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://soa.com/amortizacion" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://soa.com/amortizacion">
+			<xs:include schemaLocation="amortizacion.xsd"/>
+		</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="amortizacionMessageRequest">
+    <wsdl:part name="amortizacionRequest" element="tns:requestAmortizacion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="amortizacionMessageResponse">
+    <wsdl:part name="amortizacionResponse" element="tns:responseAmortizacion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="amortizacionPortType">
+    <wsdl:operation name="amortizacion">
+      <wsdl:input message="tns:amortizacionMessageRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:amortizacionMessageResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="amortizacionBinding" type="tns:amortizacionPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="amortizacion">
+      <soap:operation soapAction="soa.com/amortizacion/amortizacion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="amortizacion">
+    <wsdl:port name="amortizacionPort" binding="tns:amortizacionBinding">
+      <soap:address location="http://localhost:8080/axis2/services/amortizacion"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

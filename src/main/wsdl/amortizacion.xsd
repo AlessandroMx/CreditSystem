@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soa.com/amortizacion" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://soa.com/amortizacion">
+    <xs:element name="requestAmortizacion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="montoTotal" type="xs:double"/>
+                <xs:element name="numeroPagos" type="xs:int"/>
+                <xs:element name="interesAnual" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="responseAmortizacion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="tabla">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="registro">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="periodo" type="xs:int"/>
+                                        <xs:element name="saldoInicial" type="xs:double"/>
+                                        <xs:element name="cuotas" type="xs:double"/>
+                                        <xs:element name="intereses" type="xs:double"/>
+                                        <xs:element name="abonoCapital" type="xs:double"/>
+                                        <xs:element name="saldoFinal" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

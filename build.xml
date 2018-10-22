@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CreditSystem" default="package-server" basedir=".">
+    <property file="build.properties"/>
+    <property name="axis-lib" location="${axis-home}/lib"/>
+    <property name="wsdl-name" value="${wsdl.name}"/>
+    <property name="client-path" location="${client.path}"/>
+    <property name="web-service-package" value="${web.service.package}"/>
+    <property name="rutaserver" location="${server.path}"/>
+    <property name="wsdl-uri" value="./src/main/wsdl/${wsdl.name}.wsdl"/>
+    <property environment="env"/>
+    <property name="tomcat_home" value="${catalina-home}"/>
+    <property name="tomcat_deployment" value="${tomcat_home}/webapps"/>
+    <property name="axis2_deployment" value="${tomcat_deployment}/axis2/WEB-INF/services"/>
+    <path id="axis-classpath">
+        <fileset dir="${axis-home}/lib" includes="**/*.jar"/>
+    </path>
+    <target name="all-client" depends="clean-client,generate-client,compile-client,package-client"/>
+    <target name="clean-client">
+        <echo message="Eliminando archivos java, class y jar"/>
+        <delete quiet="true" dir="${client-path}"/>
+        <delete quiet="true" file="${wsdl-name}.jar"/>
+    </target>
+    <target name="clean-server">
+        <echo message="Eliminando archivos java, class y aar"/>
+        <delete quiet="true" dir="${rutaserver}"/>
+        <delete quiet="true" file="${wsdl-name}.aar"/>
+    </target>
+    <target name="sclean-server">
+        <echo message="Eliminando archivos java, class y aar"/>
+        <delete quiet="true" dir="${rutaserver}"/>
+        <delete quiet="true" file="${wsdl-name}.aar"/>
+    </target>
+    <!-- Generate server linkage code from WSDL-->
+    <target name="generate-server">
+        <echo message="Eliminando archivos java, class y aar"/>
+        <delete quiet="true" dir="${rutaserver}"/>
+        <delete quiet="true" file="${wsdl-name}.aar"/>
+        <echo message="Ejecutando WSDL2Java"/>
+        <mkdir dir="${rutaserver}"/>
+        <java classpathref="axis-classpath" fork="true" classname="org.apache.axis2.wsdl.WSDL2Java">
+            <!-- Generate async style server-code -->
+            <!-- arg value="-a" -->
+            <!-- Path donde se generara el codigo -->
+            <!--arg value="-o" />
+      		<arg value="${rutaserver}"/-->
+            <!-- Specify a custom package name for the generated code -->
+            <arg value="-p"/>
+            <arg value="${web.service.package}"/>
+            <!-- -S Source destination -->
+            <arg value="-S"/>
+            <arg value="server"/>
+            <!-- -R Resources destination -->
+            <arg value="-R"/>
+            <arg value="src/main/resources"/>
+            <!-- Valid databinding -->
+            <arg value="-d"/>
+            <arg value="adb"/>
+            <!-- -ss parameter says generate server code -->
+            <arg value="-ss"/>
+            <!-- -sd parameter says generate server deployment files , i.e services.xml -->
+            <arg value="-sd"/>
+            <!-- Unpacks de databinding classes -->
+            <!--arg value="-u"-->
+            <!-- -uw parameter unwraps the request messages -->
+            <!--arg value="-uw"-->
+            <!-- url o path -->
+            <arg value="-uri"/>
+            <arg value="${wsdl-uri}"/>
+        </java>
+        <!-- Replace implementation class in deployment descriptor -->
+        <!--  replace file="src/main/resources/services.xml" token="Skeleton" value="Impl"/-->
+        <!--  echo message="Copiando clase principal del archivo temporal"/-->
+        <!--copy file="temp/VobbServiceConfServiceImpl.java" todir="${serverpath}/com/serviceplatform/vobb/service/server/"/-->
+    </target>
+    <target name="generate-client">
+        <echo message="Running WSDL2Java task"/>
+        <mkdir dir="${client-path}"/>
+        <java classpathref="axis-classpath" fork="true" classname="org.apache.axis2.wsdl.WSDL2Java">
+            <!-- -o parameter sets the output root directory -->
+            <arg value="-o"/>
+            <arg value="${client-path}"/>
+            <!-- -p parameter gives the package for Axis2 code generation -->
+            <arg value="-p"/>
+            <arg value="${web.service.package}"/>
+            <!-- -d parameter selects the databinding framework -->
+            <arg value="-d"/>
+            <arg value="adb"/>
+            <!-- -u parameter unbundles data object classes -->
+            <arg value="-u"/>
+            <!-- -uw parameter unwraps the request messages -->
+            <!--arg value="-uw"/-->
+            <!-- -s generates synchronous methods only -->
+            <arg value="-s"/>
+            <!-- -uri parameter provides the WSDL input -->
+            <arg value="-uri"/>
+            <arg value="${wsdl-uri}"/>
+        </java>
+    </target>
+    <!-- Compile server code for deployment -->
+    <target name="compile-server">
+        <delete quiet="true" dir="${rutaserver}/bin"/>
+        <mkdir dir="${rutaserver}/bin"/>
+        <!-- Compile the generated code -->
+        <javac srcdir="${rutaserver}" destdir="${rutaserver}/bin" nowarn="${nowarn}" debug="true" deprecation="true">
+            <classpath>
+                <path refid="axis-classpath"/>
+                <pathelement path="${rutaserver}/bin"/>
+            </classpath>
+        </javac>
+    </target>
+    <target name="compile-client">
+        <delete quiet="true" dir="${client-path}/bin"/>
+        <mkdir dir="${client-path}/bin"/>
+        <!-- Compile the generated code -->
+        <javac srcdir="${client-path}" destdir="${client-path}/bin" nowarn="${nowarn}" debug="true">
+            <classpath>
+                <path refid="axis-classpath"/>
+                <pathelement path="${client-path}/bin"/>
+            </classpath>
+        </javac>
+        <!-- Compile the implementation classes -->
+        <javac srcdir="${client-path}/src" destdir="${client-path}/bin" nowarn="${nowarn}" debug="true">
+            <classpath>
+                <path refid="axis-classpath"/>
+                <pathelement path="${client-path}/bin"/>
+            </classpath>
+        </javac>
+        <copy file="log4j.properties" todir="${client-path}/bin"/>
+    </target>
+    <!-- Package server code as .aar file -->
+    <target name="package-server">
+        <echo message="Empaquetando servicio web"/>
+        <jar jarfile="${wsdl-name}.aar" basedir="bin">
+            <metainf file="src/main/resources/services.xml"/>
+            <metainf file="src/main/wsdl/${wsdl-name}.wsdl"/>
+            <metainf file="src/main/wsdl/*.xsd"/>
+            <manifest>
+                <attribute name="Funcionalidad" value="Web service de ejemplo"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="deploy" depends="package-server">
+        <echo message="Copiando archivo aar al directorio ${axis2_deployment}"/>
+        <copy todir="${axis2_deployment}" file="${wsdl-name}.aar"/>
+    </target>
+    <!-- Package client code as .jar file -->
+    <target name="package-client">
+        <jar jarfile="${wsdl-name}.jar" basedir="${client-path}/bin"/>
+    </target>
+    <target name="file-exists-then-fail">
+        <condition property="previousImplementation" value="true">
+            <not>
+                <available file="log4j.properties" filepath="."/>
+            </not>
+        </condition>
+        <fail unless="previousImplementation" message="A Previous Implementation exists, please run backup task"/>
+    </target>
+</project>
